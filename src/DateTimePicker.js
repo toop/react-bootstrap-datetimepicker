@@ -61,6 +61,7 @@ export default class DateTimePicker extends Component {
               subtractYear={this.props.subtractYear}
               viewDate={this.props.viewDate}
               viewMode={this.props.viewMode}
+              locale={this.props.locale}
         />
       </li>
       );
@@ -82,6 +83,7 @@ export default class DateTimePicker extends Component {
               subtractMinute={this.props.subtractMinute}
               togglePeriod={this.props.togglePeriod}
               viewDate={this.props.viewDate}
+              locale={this.props.locale}
         />
       </li>
       );
