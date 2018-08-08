@@ -92,6 +92,7 @@ export default class DateTimePickerDate extends Component {
             showToday={this.props.showToday}
             subtractMonth={this.props.subtractMonth}
             viewDate={this.props.viewDate}
+            locale={this.props.locale}
       />
       );
     } else {
@@ -109,6 +110,7 @@ export default class DateTimePickerDate extends Component {
             showYears={this.showYears}
             subtractYear={this.props.subtractYear}
             viewDate={this.props.viewDate}
+            locale={this.props.locale}
       />
       );
     } else {
@@ -125,6 +127,7 @@ export default class DateTimePickerDate extends Component {
             setViewYear={this.setViewYear}
             subtractDecade={this.props.subtractDecade}
             viewDate={this.props.viewDate}
+            locale={this.props.locale}
       />
       );
     } else {
