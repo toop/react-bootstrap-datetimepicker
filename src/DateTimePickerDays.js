@@ -22,6 +22,7 @@ export default class DateTimePickerDays extends Component {
 
   renderDays = () => {
     var cells, classes, days, html, month, nextMonth, prevMonth, minDate, maxDate, row, year;
+
     year = this.props.viewDate.year();
     month = this.props.viewDate.month();
     prevMonth = this.props.viewDate.clone().subtract(1, "months");
@@ -65,7 +66,21 @@ export default class DateTimePickerDays extends Component {
       }
       prevMonth.add(1, "d");
     }
+
     return html;
+  }
+
+  renderDaysCaption() {
+    // because of moment doesn't have api to get list of weekdays in local object  (when we set locale locally)
+    // we have to back up locale get weekdays and restore it
+    let currentLocale = moment.locale();
+    moment.locale(this.props.locale);
+    let weekDays = moment.weekdaysMin(true);
+    moment.locale(currentLocale);
+
+    return weekDays.map(function(day, i) {
+      return <th key={i} className="dow">{day}</th>;
+    }).concat();
   }
 
   render() {
@@ -76,25 +91,13 @@ export default class DateTimePickerDays extends Component {
             <tr>
               <th className="prev" onClick={this.props.subtractMonth}><span className="glyphicon glyphicon-chevron-left" /></th>
 
-              <th className="switch" colSpan="5" onClick={this.props.showMonths}>{moment.months()[this.props.viewDate.month()]} {this.props.viewDate.year()}</th>
+              <th className="switch" colSpan="5" onClick={this.props.showMonths}>{this.props.viewDate.format('MMMM')} {this.props.viewDate.year()}</th>
 
               <th className="next" onClick={this.props.addMonth}><span className="glyphicon glyphicon-chevron-right" /></th>
             </tr>
 
             <tr>
-              <th className="dow">Su</th>
-
-              <th className="dow">Mo</th>
-
-              <th className="dow">Tu</th>
-
-              <th className="dow">We</th>
-
-              <th className="dow">Th</th>
-
-              <th className="dow">Fr</th>
-
-              <th className="dow">Sa</th>
+              {this.renderDaysCaption()}
             </tr>
           </thead>
 
@@ -106,4 +109,3 @@ export default class DateTimePickerDays extends Component {
     );
   }
 }
-
