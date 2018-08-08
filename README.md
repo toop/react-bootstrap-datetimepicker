@@ -23,6 +23,11 @@ render: function() {
   return <DateTimeField />;
 }
 ```
+locale example：
+```javascript
+<DateTimeField locale="zh" />
+
+```
 See [Examples](examples/) for more details.
 
 API
