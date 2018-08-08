@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from "react";
+  import React, { Component, PropTypes } from "react";
 import moment from "moment";
 import classnames from "classnames";
 import DateTimePicker from "./DateTimePicker.js";
@@ -14,6 +14,7 @@ export default class DateTimeField extends Component {
     size: Constants.SIZE_MEDIUM,
     mode: Constants.MODE_DATETIME,
     zIndex: 999,
+    locale: moment.locale(),
     onChange: (x) => {
       console.log(x);
     }
@@ -23,11 +24,12 @@ export default class DateTimeField extends Component {
     if (this.props.inputFormat) { return this.props.inputFormat; }
     switch (this.props.mode) {
       case Constants.MODE_TIME:
-        return "h:mm A";
+        return moment.localeData(this.props.locale).longDateFormat('LT');
       case Constants.MODE_DATE:
-        return "MM/DD/YY";
+        return moment.localeData(this.props.locale).longDateFormat('L');
       default:
-        return "MM/DD/YY h:mm A";
+        return moment.localeData(this.props.locale).longDateFormat('L') + ' ' +
+             moment.localeData(this.props.locale).longDateFormat('LT');
     }
   }
 
@@ -49,7 +51,8 @@ export default class DateTimeField extends Component {
     viewMode: PropTypes.string,
     zIndex: PropTypes.number,
     size: PropTypes.oneOf([Constants.SIZE_SMALL, Constants.SIZE_MEDIUM, Constants.SIZE_LARGE]),
-    daysOfWeekDisabled: PropTypes.arrayOf(PropTypes.number)
+    daysOfWeekDisabled: PropTypes.arrayOf(PropTypes.number),
+    locale: PropTypes.string
   }
 
   state = {
@@ -63,7 +66,7 @@ export default class DateTimeField extends Component {
         left: -9999,
         zIndex: "9999 !important"
       },
-      viewDate: moment(this.props.dateTime, this.props.format, true).startOf("month"),
+      viewDate: moment(this.props.dateTime, this.props.format, true).startOf("month").locale(this.props.locale),
       selectedDate: moment(this.props.dateTime, this.props.format, true),
       inputValue: typeof this.props.defaultText !== "undefined" ? this.props.defaultText : moment(this.props.dateTime, this.props.format, true).format(this.resolvePropsInputFormat())
   }
@@ -76,7 +79,7 @@ export default class DateTimeField extends Component {
     }
 
     if (nextProps.dateTime !== this.props.dateTime && moment(nextProps.dateTime, nextProps.format, true).isValid()) {
-      state.viewDate = moment(nextProps.dateTime, nextProps.format, true).startOf("month");
+      state.viewDate = moment(nextProps.dateTime, nextProps.format, true).startOf("month").locale(this.props.locale);
       state.selectedDate = moment(nextProps.dateTime, nextProps.format, true);
       state.inputValue = moment(nextProps.dateTime, nextProps.format, true).format(nextProps.inputFormat ? nextProps.inputFormat : this.state.inputFormat);
     }
@@ -373,6 +376,7 @@ export default class DateTimeField extends Component {
                   viewMode={this.props.viewMode}
                   widgetClasses={this.state.widgetClasses}
                   widgetStyle={this.state.widgetStyle}
+                  locale={this.props.locale}
             />
             <div className={"input-group date " + this.size()} ref="datetimepicker">
               <input className="form-control" onChange={this.onChange} type="text" value={this.state.inputValue} {...this.props.inputProps}/>
