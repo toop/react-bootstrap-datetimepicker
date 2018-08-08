@@ -15,7 +15,14 @@ export default class DateTimePickerMonths extends Component {
   renderMonths = () => {
     var classes, i, month, months, monthsShort;
     month = this.props.selectedDate.month();
+
+    // because of moment doesn't have api to get list of weekdays in local object  (when we set locale locally)
+    // we have to back up locale get weekdays and restore it
+    let currentLocale = moment.locale();
+    moment.locale(this.props.locale);
     monthsShort = moment.monthsShort();
+    moment.locale(currentLocale);
+
     i = 0;
     months = [];
     while (i < 12) {
@@ -53,4 +60,3 @@ export default class DateTimePickerMonths extends Component {
     );
   }
 }
-
