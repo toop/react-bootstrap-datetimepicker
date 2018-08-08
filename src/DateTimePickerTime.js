@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from "react";
+import moment from 'moment';
 import DateTimePickerMinutes from "./DateTimePickerMinutes";
 import DateTimePickerHours from "./DateTimePickerHours";
 import Constants from "./Constants.js";
@@ -57,6 +58,30 @@ export default class DateTimePickerTime extends Component {
     }
   }
 
+  renderPeriodBtn() {
+    // capital A - in moment js time format means AM - PM
+    if (this.getTimeFormat().indexOf('A') > -1) {
+      return (
+          <td><button className="btn btn-primary" onClick={this.props.togglePeriod} type="button">{this.props.selectedDate.format("A")}</button></td>
+      );
+    } else {
+      return '';
+    }
+  }
+
+  getHoursFormat() {
+    return this.getTimeFormat().split(':')[0];
+  }
+
+  getMinutesFormat() {
+    return this.getTimeFormat().split(':')[1];
+  }
+
+  getTimeFormat() {
+    return moment.localeData(this.props.locale).longDateFormat('LT');
+  }
+
+
   renderPicker = () => {
     if (!this.state.minutesDisplayed && !this.state.hoursDisplayed) {
       return (
@@ -74,15 +99,15 @@ export default class DateTimePickerTime extends Component {
             </tr>
 
             <tr>
-              <td><span className="timepicker-hour" onClick={this.showHours}>{this.props.selectedDate.format("h")}</span></td>
+              <td><span className="timepicker-hour" onClick={this.showHours}>{this.props.selectedDate.format(this.getHoursFormat())}</span></td>
 
               <td className="separator">:</td>
 
-              <td><span className="timepicker-minute" onClick={this.showMinutes}>{this.props.selectedDate.format("mm")}</span></td>
+              <td><span className="timepicker-minute" onClick={this.showMinutes}>{this.props.selectedDate.format(this.getMinutesFormat())}</span></td>
 
               <td className="separator"></td>
+              {this.renderPeriodBtn()}
 
-              <td><button className="btn btn-primary" onClick={this.props.togglePeriod} type="button">{this.props.selectedDate.format("A")}</button></td>
             </tr>
 
             <tr>
